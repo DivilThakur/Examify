@@ -1,16 +1,18 @@
-/* eslint-disable no-unused-vars */
+    /* eslint-disable no-unused-vars */
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { BookOpen, Plus, Award } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Award, Clock, ArrowRight } from 'lucide-react';
+import Sidebar from './Sidebar';
 
 const Dashboard = () => {
     const [exams, setExams] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const role = localStorage.getItem('role');
+    const navigate = useNavigate();
     
     useEffect(() => {
         const fetchExams = async () => {
@@ -33,146 +35,129 @@ const Dashboard = () => {
         fetchExams();
     }, []);
     
-    const getMessageForEmptyExams = () => {
-        if (role === 'examiner') {
-            return "You haven't created any exams yet.";
-        } else {
-            return "You've completed all available exams! Check your results page to see how you did.";
-        }
-    };
-    
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1
-            }
-        }
-    };
-    
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: { type: 'spring', stiffness: 100 }
-        }
-    };
-    
     return (
-        <div className="max-w-4xl mx-auto min-h-screen p-6">
-            <motion.div 
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="flex justify-between items-center mb-8"
-            >
-                <h1 className="text-2xl font-bold text-indigo-800 flex items-center">
-                    <BookOpen size={28} className="mr-2 text-indigo-600" />
-                    {role === 'examiner' ? 'Your Created Exams' : 'Available Exams'}
-                </h1>
-                
-                {role === 'examiner' && (
-                    <Link to="/create-exam">
-                        <motion.button 
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-4 py-2 rounded-lg shadow-md transition flex items-center"
-                        >
-                            <Plus size={18} className="mr-1" />
-                            Create New Exam
-                        </motion.button>
-                    </Link>
-                )}
-            </motion.div>
+        <div className="min-h-screen bg-[#0a0a0a] text-white">
+            <Sidebar />
             
-            {loading ? (
-                <div className="flex justify-center p-8">
-                    <motion.div
-                        animate={{ 
-                            rotate: 360,
-                        }}
-                        transition={{ 
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: "linear"
-                        }}
-                        className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full"
-                    />
-                </div>
-            ) : error ? (
-                <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-sm"
-                >
-                    <p>{error}</p>
-                </motion.div>
-            ) : exams.length > 0 ? (
-                <motion.div 
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                >
-                    {exams.map((exam) => (
+            {/* Main Content */}
+            <div className="ml-64 p-8">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h1 className="text-3xl font-bold mb-2">
+                                {role === 'examiner' ? 'Your Created Exams' : 'Available Exams'}
+                            </h1>
+                            <p className="text-gray-400">
+                                {role === 'examiner' 
+                                    ? 'Create and manage your examination content' 
+                                    : 'Take available exams and track your progress'}
+                            </p>
+                        </div>
+                        
+                        {role === 'examiner' && (
+                            <button 
+                                onClick={() => navigate('/create-exam')}
+                                className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg text-white font-medium"
+                            >
+                                <Plus size={20} />
+                                Create New Exam
+                                <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                            </button>
+                        )}
+                    </div>
+
+                    {loading ? (
+                        <div className="flex justify-center p-12">
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                                className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full"
+                            />
+                        </div>
+                    ) : error ? (
                         <motion.div 
-                            key={exam._id} 
-                            variants={itemVariants}
-                            whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(79, 70, 229, 0.1)' }}
-                            className="border border-indigo-100 p-6 rounded-xl bg-white shadow hover:shadow-lg transition-all"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="p-6 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400"
                         >
-                            <h2 className="font-semibold text-xl mb-3 text-indigo-800">{exam.title}</h2>
-                            <div className="flex items-center mb-4 text-indigo-600">
-                                <BookOpen size={16} className="mr-2" />
-                                <p className="text-gray-600">{exam.questions.length} Questions</p>
-                            </div>
-                            
-                            <Link to={`/exam/${exam._id}`}>
-                                <motion.button 
-                                    whileHover={{ scale: 1.03 }}
-                                    whileTap={{ scale: 0.97 }}
-                                    className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white p-3 rounded-lg shadow transition flex items-center justify-center"
-                                >
-                                    {role === 'examiner' ? 'View Exam' : 'Take Exam'}
-                                </motion.button>
-                            </Link>
+                            <p>{error}</p>
                         </motion.div>
-                    ))}
-                </motion.div>
-            ) : (
-                <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center p-12 bg-indigo-50 rounded-xl border border-indigo-100 shadow-sm"
-                >
-                    <Award size={48} className="mx-auto mb-4 text-indigo-300" />
-                    <p className="text-indigo-800 mb-6 text-lg">{getMessageForEmptyExams()}</p>
-                    
-                    {role === 'examiner' ? (
-                        <Link to="/create-exam">
-                            <motion.button 
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-6 py-3 rounded-lg shadow transition"
-                            >
-                                Create Your First Exam
-                            </motion.button>
-                        </Link>
+                    ) : exams.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <AnimatePresence>
+                                {exams.map((exam) => (
+                                    <motion.div 
+                                        key={exam._id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        whileHover={{ y: -5 }}
+                                        className="group bg-[#111111] rounded-xl border border-white/5 hover:border-blue-500/50 transition-colors p-6"
+                                    >
+                                        <div className="flex items-start justify-between mb-4">
+                                            <h2 className="text-xl font-bold">{exam.title}</h2>
+                                            <div className="flex items-center gap-2 text-gray-400">
+                                                <Clock size={16} />
+                                                <span>{exam.duration} min</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex items-center gap-2 text-gray-400 mb-6">
+                                            <span>{exam.questions.length} Questions</span>
+                                        </div>
+                                        
+                                        <button 
+                                            onClick={() => navigate(`/exam/${exam._id}`)}
+                                            className="w-full group flex items-center justify-center gap-2 px-4 py-3 bg-white/5 rounded-lg text-white hover:bg-white/10 transition-colors"
+                                        >
+                                            {role === 'examiner' ? 'View Exam' : 'Take Exam'}
+                                            <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                        </button>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                        </div>
                     ) : (
-                        <Link to="/results">
-                            <motion.button 
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-6 py-3 rounded-lg shadow transition"
-                            >
-                                View Your Results
-                            </motion.button>
-                        </Link>
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-center p-12 bg-[#111111] rounded-xl border border-white/5"
+                        >
+                            <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                                <Award size={40} className="text-blue-400" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-4">
+                                {role === 'examiner' 
+                                    ? "You haven't created any exams yet" 
+                                    : "You've completed all available exams"}
+                            </h3>
+                            <p className="text-gray-400 mb-8">
+                                {role === 'examiner'
+                                    ? "Start by creating your first exam to get started"
+                                    : "Check your results page to see how you did"}
+                            </p>
+                            
+                            {role === 'examiner' ? (
+                                <button 
+                                    onClick={() => navigate('/create-exam')}
+                                    className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg text-white font-medium mx-auto"
+                                >
+                                    Create Your First Exam
+                                    <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                </button>
+                            ) : (
+                                <button 
+                                    onClick={() => navigate('/results')}
+                                    className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg text-white font-medium mx-auto"
+                                >
+                                    View Your Results
+                                    <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                </button>
+                            )}
+                        </motion.div>
                     )}
-                </motion.div>
-            )}
+                </div>
+            </div>
         </div>
     );
 };

@@ -1,59 +1,38 @@
-export const Footer = () => {
+import React from 'react';
+
+const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-10">
-      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
-        
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-4">Examify</h2>
-          <p className="text-sm">
-            Your trusted online exam platform providing seamless, secure, and efficient examination solutions.
-          </p>
-        </div>
-
-       
-        <div>
-          <h3 className="text-lg font-semibold text-white mb-3">Quick Links</h3>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-blue-400">Home</a></li>
-            <li><a href="#" className="hover:text-blue-400">Exams</a></li>
-            <li><a href="#" className="hover:text-blue-400">Results</a></li>
-            <li><a href="#" className="hover:text-blue-400">Certificates</a></li>
-          </ul>
-        </div>
-
-        
-        <div>
-          <h3 className="text-lg font-semibold text-white mb-3">Support</h3>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-blue-400">Privacy Policy</a></li>
-            <li><a href="#" className="hover:text-blue-400">Terms of Service</a></li>
-            <li><a href="#" className="hover:text-blue-400">FAQs</a></li>
-            <li><a href="#" className="hover:text-blue-400">Contact Us</a></li>
-          </ul>
-        </div>
-
-        
-        <div>
-          <h3 className="text-lg font-semibold text-white mb-3">Follow Us</h3>
-          <div className="flex gap-4">
-            <a href="#" className="hover:text-blue-400">
-              <i className="fab fa-facebook-f"></i> Facebook
-            </a>
-            <a href="#" className="hover:text-blue-400">
-              <i className="fab fa-twitter"></i> Twitter
-            </a>
-            <a href="#" className="hover:text-blue-400">
-              <i className="fab fa-linkedin-in"></i> LinkedIn
-            </a>
+    <footer className="bg-secondary-900 text-white py-8">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 className="text-xl font-bold mb-4">Examify</h3>
+            <p className="text-secondary-400">
+              A modern platform for conducting and taking online examinations.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li><a href="/" className="text-secondary-400 hover:text-white transition-colors">Home</a></li>
+              <li><a href="/dashboard" className="text-secondary-400 hover:text-white transition-colors">Dashboard</a></li>
+              <li><a href="/results" className="text-secondary-400 hover:text-white transition-colors">Results</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-xl font-bold mb-4">Contact</h3>
+            <ul className="space-y-2">
+              <li className="text-secondary-400">Email: support@examify.com</li>
+              <li className="text-secondary-400">Phone: +1 (555) 123-4567</li>
+            </ul>
           </div>
         </div>
-      </div>
-
-      
-      <div className="border-t border-gray-700 mt-10 pt-6 text-center text-sm">
-        <p>&copy; {new Date().getFullYear()} Examify. All rights reserved.</p>
-        <p>Built with ❤️ by Examify Team.</p>
+        <div className="border-t border-secondary-800 mt-8 pt-8 text-center text-secondary-400">
+          <p>&copy; {new Date().getFullYear()} Examify. All rights reserved.</p>
+        </div>
       </div>
     </footer>
   );
 };
+
+export default Footer;

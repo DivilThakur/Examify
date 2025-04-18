@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Download, Award, CheckCircle, XCircle, FileText } from 'lucide-react';
+import Sidebar from './Sidebar';
 
 const Results = () => {
     const [results, setResults] = useState([]);
@@ -111,10 +112,17 @@ const Results = () => {
 
     if (loading && results.length === 0) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading your results...</p>
+            <div className="min-h-screen bg-[#0a0a0a] text-white">
+                <Sidebar />
+                <div className="ml-64 p-8">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
+                            <div className="text-center">
+                                <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                                <p className="text-gray-400">Loading your results...</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -122,118 +130,120 @@ const Results = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center">
-                    <div className="text-red-500 mb-4">
-                        <XCircle size={48} className="mx-auto" />
+            <div className="min-h-screen bg-[#0a0a0a] text-white">
+                <Sidebar />
+                <div className="ml-64 p-8">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
+                            <div className="text-center">
+                                <div className="text-red-500 mb-4">
+                                    <XCircle size={48} className="mx-auto" />
+                                </div>
+                                <p className="text-gray-400">{error}</p>
+                                <button 
+                                    onClick={() => window.location.reload()} 
+                                    className="mt-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-colors"
+                                >
+                                    Try Again
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <p className="text-gray-600">{error}</p>
-                    <button 
-                        onClick={() => window.location.reload()} 
-                        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-                    >
-                        Try Again
-                    </button>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
-            <div className="max-w-4xl mx-auto px-4">
-                <div className="bg-white shadow-sm rounded-lg overflow-hidden mb-8">
-                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
-                        <div className="flex items-center">
-                            <Award className="text-white mr-3" size={24} />
-                            <h1 className="text-2xl font-bold text-white">Your Exam Results</h1>
-                        </div>
-                    </div>
-                    <div className="p-6">
-                        <p className="text-gray-600 mb-6">
-                            View your performance across all exams. Download certificates for the exams you've passed.
-                        </p>
-                        
-                        {results.length === 0 ? (
-                            <div className="text-center py-8">
-                                <FileText className="mx-auto text-gray-400 mb-3" size={48} />
-                                <p className="text-gray-500">You haven't taken any exams yet.</p>
-                                <button 
-                                    onClick={() => window.location.href = '/exams'} 
-                                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-                                >
-                                    Browse Available Exams
-                                </button>
+        <div className="min-h-screen bg-[#0a0a0a] text-white">
+            <Sidebar />
+            
+            {/* Main Content */}
+            <div className="ml-64 p-8">
+                <div className="max-w-7xl mx-auto">
+                    <h1 className="text-3xl font-bold mb-8">Your Results</h1>
+                    <div className="bg-[#111111] border border-white/5 rounded-xl overflow-hidden mb-8">
+                        <div className="bg-gradient-to-r from-purple-500 to-blue-500 px-6 py-4">
+                            <div className="flex items-center ">
+                                <Award className="text-white mr-3" size={24} />
+                                <h1 className="text-2xl font-bold text-white">Your Exam Results</h1>
                             </div>
-                        ) : (
-                            <motion.div 
-                                className="space-y-4"
-                                variants={container}
-                                initial="hidden"
-                                animate="show"
-                            >
-                                {results.map(result => {
-                                    const percentage = calculatePercentage(result);
-                                    const totalQuestions = getQuestionCount(result);
-                                    
-                                    return (
-                                        <motion.div 
-                                            key={result._id} 
-                                            className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
-                                            variants={item}
-                                        >
-                                            <div className={`flex justify-between items-center p-5 ${result.passed ? 'bg-green-50' : 'bg-red-50'}`}>
-                                                <div className="flex items-center">
-                                                    {result.passed ? 
-                                                        <CheckCircle className="text-green-500 mr-3" size={20} /> : 
-                                                        <XCircle className="text-red-500 mr-3" size={20} />
-                                                    }
-                                                    <div>
-                                                        <h3 className="font-semibold text-gray-800">{getExamTitle(result)}</h3>
-                                                        <p className="text-sm text-gray-600">
-                                                            {result.passed ? 'Passed' : 'Failed'}
-                                                        </p>
+                        </div>
+                        <div className="p-6">
+                            <p className="text-gray-400 mb-6">
+                                View your performance across all exams. Download certificates for the exams you've passed.
+                            </p>
+                            
+                            {results.length === 0 ? (
+                                <div className="text-center py-8">
+                                    <FileText className="mx-auto text-gray-400 mb-3" size={48} />
+                                    <p className="text-gray-400">You haven't taken any exams yet.</p>
+                                    <button 
+                                        onClick={() => window.location.href = '/exams'} 
+                                        className="mt-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-colors"
+                                    >
+                                        Browse Available Exams
+                                    </button>
+                                </div>
+                            ) : (
+                                <motion.div 
+                                    className="space-y-4"
+                                    variants={container}
+                                    initial="hidden"
+                                    animate="show"
+                                >
+                                    {results.map(result => {
+                                        const percentage = calculatePercentage(result);
+                                        const totalQuestions = getQuestionCount(result);
+                                        
+                                        return (
+                                            <motion.div 
+                                                key={result._id} 
+                                                className="bg-[#111111] border border-white/5 rounded-lg overflow-hidden hover:border-white/10 transition-colors"
+                                                variants={item}
+                                            >
+                                                <div className={`flex justify-between items-center p-5 ${result.passed ? 'bg-green-500/10' : 'bg-red-500/10'}`}>
+                                                    <div className="flex items-center">
+                                                        {result.passed ? 
+                                                            <CheckCircle className="text-green-400 mr-3" size={20} /> : 
+                                                            <XCircle className="text-red-400 mr-3" size={20} />
+                                                        }
+                                                        <div>
+                                                            <h3 className="font-semibold text-white">{getExamTitle(result)}</h3>
+                                                            <p className="text-sm text-gray-400">
+                                                                {result.passed ? 'Passed' : 'Failed'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <div className={`text-2xl font-bold ${result.passed ? 'text-green-400' : 'text-red-400'}`}>
+                                                            {percentage}%
+                                                        </div>
+                                                        <p className="text-sm text-gray-400">{totalQuestions} questions</p>
                                                     </div>
                                                 </div>
-                                                <div className="text-right">
-                                                    <div className={`text-2xl font-bold ${result.passed ? 'text-green-600' : 'text-red-600'}`}>
-                                                        {percentage}%
-                                                    </div>
-                                                    <div className="text-sm text-gray-500">
-                                                        Score: {result.score}/{totalQuestions}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div className="p-4 bg-white border-t border-gray-200">
-                                                <div className="flex justify-between items-center">
-                                                    <div>
-                                                        <div className="text-sm text-gray-500">Completion time: {result.duration ? `${Math.floor(result.duration / 60)}m ${result.duration % 60}s` : 'N/A'}</div>
-                                                        <div className="text-sm text-gray-500">Questions: {totalQuestions}</div>
-                                                        {result.autoSubmitted && (
-                                                            <div className="text-sm text-red-500 mt-1">
-                                                                <span className="font-semibold">Auto-submitted</span> due to multiple tab switches ({result.tabSwitches} switches)
-                                                            </div>
+                                                <div className="p-5 border-t border-white/5">
+                                                    <div className="flex justify-between items-center">
+                                                        <div className="text-sm text-gray-400">
+                                                            Score: {result.score}/{totalQuestions}
+                                                        </div>
+                                                        {result.passed && (
+                                                            <button
+                                                                onClick={() => downloadCertificate(result._id)}
+                                                                className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors"
+                                                            >
+                                                                <Download size={16} />
+                                                                Download Certificate
+                                                            </button>
                                                         )}
                                                     </div>
-                                                    
-                                                    {result.passed && (
-                                                        <button 
-                                                            onClick={() => downloadCertificate(result._id)} 
-                                                            className="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors"
-                                                            disabled={loading}
-                                                        >
-                                                            <Download size={16} className="mr-2" />
-                                                            {loading ? 'Processing...' : 'Download Certificate'}
-                                                        </button>
-                                                    )}
                                                 </div>
-                                            </div>
-                                        </motion.div>
-                                    );
-                                })}
-                            </motion.div>
-                        )}
+                                            </motion.div>
+                                        );
+                                    })}
+                                </motion.div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
