@@ -19,7 +19,7 @@ const Results = () => {
                 const token = localStorage.getItem('token');
                 
                 // Fetch results
-                const resultsResponse = await axios.get('http://localhost:5000/api/results', {
+                const resultsResponse = await axios.get('https://examify-1.onrender.com/api/results', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 
@@ -74,7 +74,7 @@ const Results = () => {
         setLoading(true);
         const token = localStorage.getItem('token');
         axios({
-            url: `http://localhost:5000/api/results/certificate/${resultId}`,
+            url: `https://examify-1.onrender.com/api/results/certificate/${resultId}`,
             method: 'GET',
             responseType: 'blob',
             headers: { Authorization: `Bearer ${token}` }

@@ -19,7 +19,7 @@ const Dashboard = () => {
             const token = localStorage.getItem('token');
             try {
                 setLoading(true);
-                const response = await axios.get('http://localhost:5000/api/exams', {
+                const response = await axios.get('https://examify-1.onrender.com/api/exams', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setExams(response.data);

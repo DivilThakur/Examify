@@ -31,7 +31,7 @@ const CreateExam = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
-        await axios.post('http://localhost:5000/api/exams', { title, questions }, {
+        await axios.post('https://examify-1.onrender.com/api/exams', { title, questions }, {
             headers: { Authorization: `Bearer ${token}` }
         });
         window.location.href = '/dashboard';

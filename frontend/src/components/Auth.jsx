@@ -29,7 +29,7 @@ const Auth = () => {
 
         setIsLoading(true);
         const endpoint = isRegistering ? 'register' : 'login';
-        const url = `http://localhost:5000/api/auth/${endpoint}`;
+        const url = `https://examify-1.onrender.com/api/auth/${endpoint}`;
 
         // Transform the data to match backend expectations
         const requestData = {
